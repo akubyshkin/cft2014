@@ -20,17 +20,7 @@
     <%
     DataSource ds = AppUtil.getDataSource();
     Connection c = ds.getConnection();
-    String createTable = "CREATE TABLE CLIENTS " +
-        "(ID INTEGER NOT NULL IDENTITY, " +
-        "FIRST_NAME VARCHAR(250) NOT NULL, " +
-        "SECOND_NAME VARCHAR(250), " +
-        "LAST_NAME VARCHAR(250) NOT NULL)";
-    PreparedStatement s = c.prepareStatement(createTable);
-    s.executeUpdate();
-    s = c.prepareStatement("insert into CLIENTS(FIRST_NAME, SECOND_NAME, LAST_NAME) " +
-        "values('Alexander','Sergeevich','Kubyshkin');");
-    s.executeUpdate();
-    s = c.prepareStatement("select * from clients");
+    PreparedStatement s = c.prepareStatement("select * from clients");
     ResultSet rs = s.executeQuery();
     while(rs.next()) {
       Integer id = rs.getInt(1);
@@ -47,6 +37,7 @@
       <%
     }
     c.commit();
+    c.close();
     %>
     </table>
   </body>
