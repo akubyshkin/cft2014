@@ -10,6 +10,10 @@ import javax.sql.DataSource;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -75,13 +79,22 @@ public class BootstrapListener extends org.springframework.web.context.ContextLo
   private void initHibernateDatabase(Session session) {
     session.save(new Client("Alexander", "Sergeevich", "Kubyshkin"));
     session.save(new Client("Anastasiya", "Sergeevna", "Kubyshkina"));
-    session.close();
   }
 
   private void initSpringHibernateDatabase(ServletContextEvent arg0) {
-    WebApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(arg0.getServletContext());
-    SessionFactory sf = ctx.getBean(SessionFactory.class);
-    Session s = sf.openSession();
-    initHibernateDatabase(s);
+    final WebApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(arg0
+        .getServletContext());
+    PlatformTransactionManager tm = ctx.getBean(PlatformTransactionManager.class);
+    TransactionTemplate tt = new TransactionTemplate(tm);
+    tt.execute(new TransactionCallback<Void>() {
+      @Override
+      public Void doInTransaction(TransactionStatus status) {
+        SessionFactory sf = ctx.getBean(SessionFactory.class);
+        Session s = sf.getCurrentSession();
+        initHibernateDatabase(s);
+        // status.setRollbackOnly();
+        return null;
+      }
+    });
   }
 }

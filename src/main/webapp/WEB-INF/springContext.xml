@@ -10,8 +10,7 @@
  
    <!-- <context:property-placeholder location="classpath:persistence-mysql.properties" /> -->
 
-   <bean id="sessionFactory"
-    class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+   <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
       <property name="dataSource" ref="dataSource" />
       <property name="packagesToScan" value="cft2014.runner.entity" />
       <property name="hibernateProperties">
@@ -27,20 +26,17 @@
       </property>
    </bean>
 
-   <bean id="dataSource"
-    class="com.mchange.v2.c3p0.ComboPooledDataSource">
+   <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
       <property name="driverClass" value="org.hsqldb.jdbc.JDBCDriver" />
       <property name="jdbcUrl" value="jdbc:hsqldb:mem:clients" />
       <property name="user" value="sa" />
       <property name="password" value="" />
    </bean>
-<!-- 
-   <bean id="transactionManager"
-    class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+
+   <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
       <property name="sessionFactory" ref="sessionFactory" />
    </bean>
- 
-   <bean id="persistenceExceptionTranslationPostProcessor"
-    class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
- -->
+
+   <bean id="persistenceExceptionTranslationPostProcessor" class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
 </beans>
