@@ -2,41 +2,49 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xmlns:context="http://www.springframework.org/schema/context"
+   xmlns:tx="http://www.springframework.org/schema/tx"
    xsi:schemaLocation="
       http://www.springframework.org/schema/beans 
       http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+      http://www.springframework.org/schema/tx
+      http://www.springframework.org/schema/tx/spring-tx.xsd
       http://www.springframework.org/schema/context 
       http://www.springframework.org/schema/context/spring-context-3.2.xsd">
  
-   <context:property-placeholder location="classpath:database_connection.properties" />
+  <context:property-placeholder location="classpath:database_connection.properties" />
 
-   <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-      <property name="dataSource" ref="dataSource" />
-      <property name="packagesToScan" value="cft2014.runner.entity" />
-      <property name="hibernateProperties">
-         <props>
-            <prop key="hibernate.hbm2ddl.auto">create</prop>
-            <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
-            <prop key="hibernate.show_sql">true</prop>
-            <prop key="hibernate.c3p0.min_size">5</prop>
-            <prop key="hibernate.c3p0.max_size">20</prop>
-            <prop key="hibernate.c3p0.timeout">300</prop>
-            <prop key="hibernate.c3p0.max_statements">50</prop>
-         </props>
-      </property>
-   </bean>
+  <context:component-scan base-package="cft2014.runner.dao.impl"/>
+  <context:component-scan base-package="cft2014.runner.service.impl"/>
 
-   <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-      <property name="driverClass" value="org.hsqldb.jdbc.JDBCDriver" />
-      <property name="jdbcUrl" value="jdbc:hsqldb:mem:clients" />
-      <property name="user" value="sa" />
-      <property name="password" value="" />
-   </bean>
+  <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSource" />
+    <property name="packagesToScan" value="cft2014.runner.entity" />
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+        <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+        <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+        <prop key="hibernate.c3p0.min_size">${hibernate.c3p0.min_size}</prop>
+        <prop key="hibernate.c3p0.max_size">${hibernate.c3p0.max_size}</prop>
+        <prop key="hibernate.c3p0.timeout">${hibernate.c3p0.timeout}</prop>
+        <prop key="hibernate.c3p0.max_statements">${hibernate.c3p0.max_statements}</prop>
+      </props>
+    </property>
+  </bean>
 
-   <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-      <property name="sessionFactory" ref="sessionFactory" />
-   </bean>
+  <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+    <property name="driverClass" value="${driverClass}" />
+    <property name="jdbcUrl" value="${jdbcUrl}" />
+    <property name="user" value="${user}" />
+    <property name="password" value="${password}" />
+  </bean>
 
-   <bean id="persistenceExceptionTranslationPostProcessor" class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+  <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory" />
+  </bean>
+
+  <tx:annotation-driven/>
+
+  <bean id="persistenceExceptionTranslationPostProcessor" class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
 
 </beans>

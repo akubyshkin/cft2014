@@ -1,10 +1,8 @@
+<%@page import="cft2014.runner.service.IClientManagementService"%>
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>
 <%@page import="org.springframework.web.context.WebApplicationContext"%>
 <%@page import="cft2014.runner.entity.Client"%>
 <%@page import="java.util.List"%>
-<%@page import="org.hibernate.Query"%>
-<%@page import="org.hibernate.Session"%>
-<%@page import="org.hibernate.SessionFactory"%>
 <html>
   <head>
     <title>Clients3</title>
@@ -21,11 +19,8 @@
       </tr>
     <%
     WebApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
-    SessionFactory sf = ctx.getBean(SessionFactory.class);
-    Session s = sf.openSession();
-    Query q = s.createQuery("from Client c");
-    List<Client> list = q.list();
-    s.close();
+    IClientManagementService clientMS = ctx.getBean(IClientManagementService.class);
+    List<Client> list = clientMS.listAll();
     for(Client c : list) {
       %>
       <tr>
