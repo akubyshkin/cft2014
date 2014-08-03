@@ -1,11 +1,13 @@
-<%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.PreparedStatement"%>
-<%@page import="java.sql.Connection"%>
-<%@page import="javax.sql.DataSource"%>
-<%@page import="cft2014.runner.AppUtil"%>
+<%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>
+<%@page import="org.springframework.web.context.WebApplicationContext"%>
+<%@page import="cft2014.runner.entity.Client"%>
+<%@page import="java.util.List"%>
+<%@page import="org.hibernate.Query"%>
+<%@page import="org.hibernate.Session"%>
+<%@page import="org.hibernate.SessionFactory"%>
 <html>
   <head>
-    <title>Clients</title>
+    <title>Clients3</title>
   </head>
   <body>
     List of clients:
@@ -18,26 +20,22 @@
         <td>LAST_NAME</td>
       </tr>
     <%
-    DataSource ds = AppUtil.getDataSource();
-    Connection c = ds.getConnection();
-    PreparedStatement s = c.prepareStatement("select * from clients");
-    ResultSet rs = s.executeQuery();
-    while(rs.next()) {
-      Integer id = rs.getInt(1);
-      String firstName = rs.getString(2);
-      String secondName = rs.getString(3);
-      String lastName = rs.getString(4);
+    WebApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
+    SessionFactory sf = ctx.getBean(SessionFactory.class);
+    Session s = sf.openSession();
+    Query q = s.createQuery("from Client c");
+    List<Client> list = q.list();
+    s.close();
+    for(Client c : list) {
       %>
       <tr>
-        <td><%=id %></td>
-        <td><%=firstName %></td>
-        <td><%=secondName %></td>
-        <td><%=lastName %></td>
+        <td><%=c.getId() %></td>
+        <td><%=c.getFirstName() %></td>
+        <td><%=c.getSecondName() %></td>
+        <td><%=c.getLastName() %></td>
       </tr>
       <%
     }
-    c.commit();
-    c.close();
     %>
     </table>
   </body>
