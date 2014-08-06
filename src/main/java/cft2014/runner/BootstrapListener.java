@@ -13,7 +13,6 @@ public class BootstrapListener extends ContextLoaderListener {
 
   @Override
   public void contextInitialized(ServletContextEvent arg0) {
-    System.out.println("BootstrapListener: onContextInitialized");
     super.contextInitialized(arg0);
     initDatabase(arg0);
   }
@@ -21,7 +20,6 @@ public class BootstrapListener extends ContextLoaderListener {
   @Override
   public void contextDestroyed(ServletContextEvent arg0) {
     super.contextDestroyed(arg0);
-    System.out.println("BootstrapListener: onContextDestroyed");
   }
 
   private void initDatabase(ServletContextEvent arg0) {

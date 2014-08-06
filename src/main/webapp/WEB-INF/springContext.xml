@@ -15,6 +15,7 @@
 
   <context:component-scan base-package="cft2014.runner.dao.impl"/>
   <context:component-scan base-package="cft2014.runner.service.impl"/>
+  <context:component-scan base-package="cft2014.runner.presentation"/>
 
   <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
     <property name="dataSource" ref="dataSource" />
