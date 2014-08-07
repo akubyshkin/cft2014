@@ -26,6 +26,5 @@ public class BootstrapListener extends ContextLoaderListener {
     WebApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(arg0.getServletContext());
     IClientManagementService clientMS = ctx.getBean(IClientManagementService.class);
     clientMS.create(new Client("Alexander", "Sergeevich", "Kubyshkin"));
-    clientMS.create(new Client("Anastasiya", "Sergeevna", "Kubyshkina"));
   }
 }
